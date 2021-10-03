@@ -6,6 +6,8 @@ public class UIController : MonoBehaviour
 {
     public Slider HappySlider;
     public TMP_Text TimerText;
+    public GameObject StartPanel;
+    public GameObject EndPanel;
     public float SliderSpeed;
 
 	private float RequestedSliderNum;
@@ -29,6 +31,14 @@ public class UIController : MonoBehaviour
 			DecreaseSlider();
 	}
 
+	public void OpenGameWindow()
+	{
+		StartPanel.SetActive(false);
+	}
+	public void OpenEndGameWindow()
+	{
+		EndPanel.SetActive(true);
+	}
 	private void EncreaseSlider()
 	{
 		HappySlider.value += SliderSpeed;

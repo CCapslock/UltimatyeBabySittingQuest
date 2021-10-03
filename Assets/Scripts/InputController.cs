@@ -21,23 +21,38 @@ public class InputController : MonoBehaviour
 	private float _movementX;
 	private float _movementZ;
 	private bool _itemSelected;
+	private bool _isGameStarted;
 	private void Start()
 	{
 		_playerMovement = GetComponent<PlayerMovement>();
 		_dragController = GetComponent<DragController>();
 		_cameraTransform = Camera.main.transform;
-		Cursor.lockState = CursorLockMode.Locked;
 		_cameraRotationVector = new Vector3();
 	}
+	public void StartInput()
+	{
+		_isGameStarted = true;
+		Cursor.lockState = CursorLockMode.Locked;
+	}
+	public void StopInput()
+	{
+		_isGameStarted = false;
+		Cursor.lockState = CursorLockMode.None;
+	}
+
+
 	private void Update()
 	{
-		TakeMouseInput();
-		TakeMovementVector();
-		CheckForMouseInput();
-		CheckForItems();
+		if (_isGameStarted)
+		{
+			TakeMouseInput();
+			TakeMovementVector();
+			CheckForMouseInput();
+			CheckForItems();
 
-		_playerMovement.CameraLook(_cameraRotationVector, _playerRotationVector);
-		_playerMovement.MovePlayer(_movementX, _movementZ);
+			_playerMovement.CameraLook(_cameraRotationVector, _playerRotationVector);
+			_playerMovement.MovePlayer(_movementX, _movementZ);
+		}
 	}
 	private void TakeMouseInput()
 	{
