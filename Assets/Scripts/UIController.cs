@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
     public Slider HappySlider;
+    public TMP_Text TimerText;
     public float SliderSpeed;
 
 	private float RequestedSliderNum;
+	private int MinutesLeft;
 	private bool _needToEncreaseSlider;
 	private bool _needToDecreaseSlider;
 
@@ -43,5 +46,10 @@ public class UIController : MonoBehaviour
 			_needToDecreaseSlider = false;
 			HappySlider.value = RequestedSliderNum;
 		}
+	}
+	public void SetTime(int seconds)
+	{
+		MinutesLeft = (seconds / 60);
+		TimerText.text = (MinutesLeft + " : " + (seconds - MinutesLeft * 60));
 	}
 }
