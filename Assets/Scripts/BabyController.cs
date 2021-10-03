@@ -6,6 +6,10 @@ public class BabyController : MonoBehaviour
 	public GameObject Baby;
 	public Transform Diaper;
 	public Transform Pelvis;
+	public Renderer BabyBody;
+	public Renderer BabyHead;
+	public Material BabyHealthMaterial;
+	public Material BabyIllMaterial;
 	public float MinTimeBeforeAction;
 	public float MaxTimeBeforeAction;
 	public float CryUppsetNumber;
@@ -89,24 +93,10 @@ public class BabyController : MonoBehaviour
 					MakeUpsetAction(UpsetActions.Cry);
 					break;
 				case 1:
-					if (_currentState != BabyState.Pooped)
-					{
-						MakeUpsetAction(UpsetActions.Poop);
-					}
-					else
-					{
-						MakeUpsetAction(UpsetActions.Cry);
-					}
+					MakeUpsetAction(UpsetActions.Poop);
 					break;
 				case 2:
-					if (_currentState != BabyState.Ill)
-					{
-						MakeUpsetAction(UpsetActions.Ill);
-					}
-					else
-					{
-						MakeUpsetAction(UpsetActions.Cry);
-					}
+					MakeUpsetAction(UpsetActions.Ill);
 					break;
 			}
 		}
@@ -131,9 +121,9 @@ public class BabyController : MonoBehaviour
 				_currentState = BabyState.Pooped;
 				break;
 			case UpsetActions.Ill:
-				_isBusy = false;
-				//_babyAnimator.SetTrigger("Ill");
-				//_currentState = BabyState.Ill;
+				_babyAnimator.SetTrigger("Ill");
+				_currentState = BabyState.Ill; 
+				BecomeIll();
 				break;
 		}
 		DecideImpression();
@@ -172,10 +162,9 @@ public class BabyController : MonoBehaviour
 			{
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
-					WearDiaper(item);
+						WearDiaper(item);
 					item.WearDiaper();
-						return true;
-					break;
+					return true;
 				case ItemType.Medicine:
 					if (_currentState == BabyState.Ill)
 						_currentState = BabyState.Neutral;
@@ -229,7 +218,21 @@ public class BabyController : MonoBehaviour
 		_itemTransform.localPosition = Vector3.zero;
 		_itemTransform.gameObject.layer = 0;
 		Invoke(nameof(DestroyObject), TimeBeforeFoodDisapear);
-		Invoke(nameof(MakeFoodFeedBack), EatingAnimationLenght);
+		Invoke(nameof(MakeMedicineFeedBack), EatingAnimationLenght);
+	}
+	private void BecomeIll()
+	{
+		Material[] mats = BabyBody.sharedMaterials;
+		mats[0] = BabyIllMaterial;
+		BabyBody.sharedMaterials = mats;
+		mats = BabyHead.sharedMaterials;
+		mats[0] = BabyIllMaterial;
+		BabyHead.sharedMaterials = mats;
+	}
+	private void BecomeHealthy()
+	{
+		BabyBody.sharedMaterials[0] = BabyHealthMaterial;
+		BabyHead.sharedMaterials[0] = BabyHealthMaterial;
 	}
 	private void PlayWithItem(DragAbleObject item)
 	{
@@ -263,6 +266,8 @@ public class BabyController : MonoBehaviour
 			_itemTransform.localPosition = Vector3.zero;
 			_itemTransform.gameObject.layer = 0;
 		}
+
+		TurnOfBusy();
 	}
 	private void MakeFoodFeedBack()
 	{
@@ -273,8 +278,9 @@ public class BabyController : MonoBehaviour
 		if (_currentState == BabyState.Ill)
 		{
 			_currentState = BabyState.Neutral;
-			HappyMeter -= _lastUsedItem.NegativePointsIfEat;
-			_babyAnimator.SetTrigger("GoodFood");
+			HappyMeter += _lastUsedItem.NegativePointsIfEat;
+			_babyAnimator.SetTrigger("GoodFood"); 
+			BecomeHealthy();
 			Invoke(nameof(TurnOfBusy), ClapAnimationLenght);
 		}
 		else
@@ -316,9 +322,9 @@ public class BabyController : MonoBehaviour
 			Invoke(nameof(StartVomiting), TimeBeforeStartVomiting);
 			Invoke(nameof(StopVomiting), VomitingAnimationLenght);
 		}
+		TurnOfBusy();
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
-		TurnOfBusy();
 	}
 	private void DecideImpression()
 	{
