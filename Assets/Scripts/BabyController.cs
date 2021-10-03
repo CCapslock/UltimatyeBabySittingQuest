@@ -17,6 +17,10 @@ public class BabyController : MonoBehaviour
 	[Foldout("Animation Parameters")]
 	public float TimeBeforeFoodDisapear;
 	[Foldout("Animation Parameters")]
+	public float TimeBeforeGoodToyDisapear;
+	[Foldout("Animation Parameters")]
+	public float TimeBeforeBadToyDisapear;
+	[Foldout("Animation Parameters")]
 	public float VomitingAnimationLenght;
 	[Foldout("Animation Parameters")]
 	public float CryAnimationLenght;
@@ -144,6 +148,7 @@ public class BabyController : MonoBehaviour
 	{
 		if (!_isBusy)
 		{
+			_isBusy = true;
 			switch (item.ItemType)
 			{
 				case ItemType.Food:
@@ -167,12 +172,14 @@ public class BabyController : MonoBehaviour
 			{
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
-						WearDiaper(item);
+					WearDiaper(item);
+					item.WearDiaper();
+						return true;
 					break;
 				case ItemType.Medicine:
 					if (_currentState == BabyState.Ill)
 						_currentState = BabyState.Neutral;
-					break;
+					return true;
 			}
 			return false;
 		}
@@ -226,15 +233,36 @@ public class BabyController : MonoBehaviour
 	}
 	private void PlayWithItem(DragAbleObject item)
 	{
-		_lastUsedItem = item;
-		_babyAnimator.SetTrigger("Play");
-		_itemTransform = item.transform;
-		_itemRigidbody = _itemTransform.GetComponent<Rigidbody>();
-		_itemRigidbody.isKinematic = true;
-		_itemRigidbody.useGravity = false;
-		_itemTransform.parent = TransformForItem;
-		_itemTransform.localPosition = Vector3.zero;
-		_itemTransform.gameObject.layer = 0;
+		int num = Random.Range(1, 100);
+		if (num <= item.ChanceOfSucces)
+		{
+			//goodresult
+			HappyMeter -= item.PositivePointsIfPlay;
+			_lastUsedItem = item;
+			_babyAnimator.SetTrigger("GoodPlay");
+			_itemTransform = item.transform;
+			_itemRigidbody = _itemTransform.GetComponent<Rigidbody>();
+			_itemRigidbody.isKinematic = true;
+			_itemRigidbody.useGravity = false;
+			_itemTransform.parent = TransformForItem;
+			_itemTransform.localPosition = Vector3.zero;
+			_itemTransform.gameObject.layer = 0;
+			Invoke(nameof(DestroyObject), TimeBeforeFoodDisapear);
+		}
+		else
+		{
+			//badresult
+			HappyMeter -= item.NegativePointsIfPlay;//goodresult
+			_lastUsedItem = item;
+			_babyAnimator.SetTrigger("BadPlay");
+			_itemTransform = item.transform;
+			_itemRigidbody = _itemTransform.GetComponent<Rigidbody>();
+			_itemRigidbody.isKinematic = true;
+			_itemRigidbody.useGravity = false;
+			_itemTransform.parent = TransformForItem;
+			_itemTransform.localPosition = Vector3.zero;
+			_itemTransform.gameObject.layer = 0;
+		}
 	}
 	private void MakeFoodFeedBack()
 	{
@@ -290,6 +318,7 @@ public class BabyController : MonoBehaviour
 		}
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
+		TurnOfBusy();
 	}
 	private void DecideImpression()
 	{
