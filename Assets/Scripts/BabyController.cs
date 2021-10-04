@@ -60,6 +60,9 @@ public class BabyController : MonoBehaviour
 		_uiController = GetComponent<UIController>();
 		_diaperOnPelvisPosition = Diaper.localPosition;
 		_diaperOnPelvisRotation = Diaper.rotation;
+	}
+	public void StartTheBaby()
+	{
 		WaitBeforeUpsetAction();
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
@@ -122,7 +125,7 @@ public class BabyController : MonoBehaviour
 				break;
 			case UpsetActions.Ill:
 				_babyAnimator.SetTrigger("Ill");
-				_currentState = BabyState.Ill; 
+				_currentState = BabyState.Ill;
 				BecomeIll();
 				break;
 		}
@@ -151,7 +154,9 @@ public class BabyController : MonoBehaviour
 					WearDiaper(item);
 					break;
 				case ItemType.Medicine:
-					_currentState = BabyState.Neutral;
+					_itemTransform = item.transform;
+					MakeMedicineFeedBack();
+					DestroyObject();
 					break;
 			}
 			return true;
@@ -166,8 +171,10 @@ public class BabyController : MonoBehaviour
 					item.WearDiaper();
 					return true;
 				case ItemType.Medicine:
-					if (_currentState == BabyState.Ill)
-						_currentState = BabyState.Neutral;
+					Debug.Log("EatMedicine");
+					_itemTransform = item.transform;
+					MakeMedicineFeedBack();
+					DestroyObject();
 					return true;
 			}
 			return false;
@@ -204,7 +211,7 @@ public class BabyController : MonoBehaviour
 		_itemTransform.localPosition = Vector3.zero;
 		_itemTransform.gameObject.layer = 0;
 		Invoke(nameof(DestroyObject), TimeBeforeFoodDisapear);
-		Invoke(nameof(MakeFoodFeedBack), EatingAnimationLenght);
+		Invoke(nameof(MakeMedicineFeedBack), EatingAnimationLenght);
 	}
 	private void EatItem(DragAbleObject item)
 	{
@@ -218,7 +225,7 @@ public class BabyController : MonoBehaviour
 		_itemTransform.localPosition = Vector3.zero;
 		_itemTransform.gameObject.layer = 0;
 		Invoke(nameof(DestroyObject), TimeBeforeFoodDisapear);
-		Invoke(nameof(MakeMedicineFeedBack), EatingAnimationLenght);
+		Invoke(nameof(MakeFoodFeedBack), EatingAnimationLenght);
 	}
 	private void BecomeIll()
 	{
@@ -231,8 +238,12 @@ public class BabyController : MonoBehaviour
 	}
 	private void BecomeHealthy()
 	{
-		BabyBody.sharedMaterials[0] = BabyHealthMaterial;
-		BabyHead.sharedMaterials[0] = BabyHealthMaterial;
+		Material[] mats = BabyBody.sharedMaterials;
+		mats[0] = BabyHealthMaterial;
+		BabyBody.sharedMaterials = mats;
+		mats = BabyHead.sharedMaterials;
+		mats[0] = BabyHealthMaterial;
+		BabyHead.sharedMaterials = mats;
 	}
 	private void PlayWithItem(DragAbleObject item)
 	{
@@ -279,7 +290,7 @@ public class BabyController : MonoBehaviour
 		{
 			_currentState = BabyState.Neutral;
 			HappyMeter += _lastUsedItem.NegativePointsIfEat;
-			_babyAnimator.SetTrigger("GoodFood"); 
+			_babyAnimator.SetTrigger("GoodFood");
 			BecomeHealthy();
 			Invoke(nameof(TurnOfBusy), ClapAnimationLenght);
 		}
@@ -292,6 +303,7 @@ public class BabyController : MonoBehaviour
 		}
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
+		TurnOfBusy();
 	}
 	private void DestroyObject()
 	{

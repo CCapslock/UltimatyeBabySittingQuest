@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private CharacterController _characterController;
 	private Vector3 _playerMovementVector;
+	private Vector3 _playerVelocityVector;
 	private Vector3 _cameraStartPosition;
 	private Vector3 _cameraDestanationPosition;
 	private bool _needToMoveCamera;
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		_characterController = FindObjectOfType<CharacterController>();
 		_playerMovementVector = new Vector3();
+		_playerVelocityVector = new Vector3();
 		_cameraStartPosition = CameraTransform.localPosition;
 	}
 	private void FixedUpdate()
@@ -44,18 +46,21 @@ public class PlayerMovement : MonoBehaviour
 	public void MovePlayer(float xInput, float zInput)
 	{
 		_playerMovementVector = PlayerTransform.right * xInput + PlayerTransform.forward * zInput;
+		_playerVelocityVector.y += -9.81f * Time.deltaTime;
 		if (_isCrawl)
 			_characterController.Move(_playerMovementVector * CrawlSpeed * Time.deltaTime);
 		else
 			_characterController.Move(_playerMovementVector * Speed * Time.deltaTime);
 
+		_characterController.Move(_playerVelocityVector * Time.deltaTime);
 	}
 	public void StartCrawl()
 	{
 		_cameraDestanationPosition = CameraCrawlPosition;
 		_needToMoveCamera = true;
 		_isCrawl = true;
-	}public void StopCrawl()
+	}
+	public void StopCrawl()
 	{
 		_cameraDestanationPosition = _cameraStartPosition;
 		_needToMoveCamera = true;
