@@ -17,6 +17,7 @@ public class DragAbleObject : MonoBehaviour
 	public int ChanceOfSuccesToy;
 	public int ChanceOfRandomAction = 5;
 	public bool IsDiaperDirty;
+	public bool IsDiaperOn;
 
 	private Collider _itemCollider;
 	private Rigidbody _itemRigidbody;

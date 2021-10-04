@@ -10,7 +10,7 @@ public class DragController : MonoBehaviour
 	private Rigidbody _itemRigidbody;
 	private Transform _itemTransform;
 	private DragAbleObject _item;
-	private bool _isHolding;
+	[SerializeField]private bool _isHolding;
 
 	private void Start()
 	{
@@ -30,6 +30,10 @@ public class DragController : MonoBehaviour
 			_itemTransform.parent = HoldPositionTransform;
 			_itemTransform.localPosition = Vector3.zero;
 			_itemTransform.gameObject.layer = 7;
+			if(_item.ItemType == ItemType.Diper && _item.IsDiaperOn)
+			{
+				_babyController.TakeAwayDiaper();
+			}
 		}
 	}
 	public void ReleaseItem()

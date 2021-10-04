@@ -55,6 +55,7 @@ public class BabyController : MonoBehaviour
 	private Quaternion _diaperOnPelvisRotation;
 
 	[SerializeField] private bool _isBusy; private int _randomNum;
+	private bool _isDiaperOn = true;
 
 	private void Start()
 	{
@@ -87,6 +88,10 @@ public class BabyController : MonoBehaviour
 	private void WaitBeforeUpsetAction()
 	{
 		Invoke(nameof(SelectAction), Random.Range(MinTimeBeforeAction, MaxTimeBeforeAction));
+	}
+	public void TakeAwayDiaper()
+	{
+		_isDiaperOn = false;
 	}
 	private void SelectAction()
 	{
@@ -178,7 +183,7 @@ public class BabyController : MonoBehaviour
 					}
 					break;
 				case ItemType.Diper:
-					if (_currentState == BabyState.Pooped)
+					if (_currentState == BabyState.Pooped && !_isDiaperOn)
 					{
 						WearDiaper(item);
 						item.WearDiaper();
@@ -189,7 +194,13 @@ public class BabyController : MonoBehaviour
 						{
 							EatItem(item);
 						}
+						else
+						{
+							Debug.Log("Throw");
+							FindObjectOfType<DragController>().ReleaseItem();
+						}
 					}
+					_isBusy = false;
 					break;
 				case ItemType.Medicine:
 					_lastUsedItem = item;
@@ -206,7 +217,7 @@ public class BabyController : MonoBehaviour
 			switch (item.ItemType)
 			{
 				case ItemType.Diper:
-					if (_currentState == BabyState.Pooped)
+					if (_currentState == BabyState.Pooped && !_isDiaperOn)
 					{
 						MakecorrectEmoji();
 						WearDiaper(item);
@@ -226,7 +237,7 @@ public class BabyController : MonoBehaviour
 	}
 	private void WearDiaper(DragAbleObject item)
 	{
-		Debug.Log("Wear");
+		_isDiaperOn = true;
 		Diaper = item.transform;
 		_itemRigidbody = Diaper.GetComponent<Rigidbody>();
 		_itemRigidbody.isKinematic = true;
@@ -235,6 +246,7 @@ public class BabyController : MonoBehaviour
 		Diaper.localPosition = _diaperOnPelvisPosition;
 		Diaper.rotation = _diaperOnPelvisRotation;
 		Diaper.gameObject.layer = 0;
+		item.IsDiaperOn = true;
 		if (_currentState == BabyState.Pooped && !item.IsDiaperDirty)
 		{
 			_currentState = BabyState.Neutral;
@@ -242,6 +254,7 @@ public class BabyController : MonoBehaviour
 			_babyAnimator.SetTrigger("Clap");
 			Invoke(nameof(TurnOfBusy), ClapAnimationLenght);
 		}
+		MakecorrectEmoji();
 	}
 	private void EatMedicine(DragAbleObject item)
 	{
@@ -295,7 +308,7 @@ public class BabyController : MonoBehaviour
 		if (num <= item.ChanceOfSuccesToy)
 		{
 			//goodresult
-			HappyMeter -= item.PositivePointsIfPlay;
+			HappyMeter += item.PositivePointsIfPlay;
 			_lastUsedItem = item;
 			_babyAnimator.SetTrigger("GoodPlay");
 			_itemTransform = item.transform;
@@ -323,6 +336,7 @@ public class BabyController : MonoBehaviour
 			Invoke(nameof(ThrowAwayItem), TimeBeforeBadToyThrow);
 		}
 
+		_uiController.SetSlider(HappyMeter);
 		TurnOfBusy();
 		Invoke(nameof(MakecorrectEmoji), 1f);
 	}
