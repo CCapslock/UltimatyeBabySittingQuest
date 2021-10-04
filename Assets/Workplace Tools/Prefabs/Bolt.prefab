@@ -11,10 +11,13 @@ GameObject:
   - component: {fileID: 4000014012176654}
   - component: {fileID: 33000012937211698}
   - component: {fileID: 23000011640202488}
-  - component: {fileID: 64000012469121188}
+  - component: {fileID: 642831196}
+  - component: {fileID: 642831194}
+  - component: {fileID: 642831193}
+  - component: {fileID: 642831192}
   m_Layer: 0
   m_Name: Bolt
-  m_TagString: Untagged
+  m_TagString: DragAble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,9 +29,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000011041813418}
-  m_LocalRotation: {x: -0.00000003774895, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,7 +85,77 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64000012469121188
+--- !u!54 &642831196
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011041813418}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!114 &642831194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011041813418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67278f0c6454e424f8e9f4428615353e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StinkyCloud: {fileID: 0}
+  BasicMaterial: {fileID: 2100000, guid: 2e55abf94b4fc354e89d9f6d08554588, type: 2}
+  OutlinedMaterial: {fileID: 2100000, guid: 2c118ffb93bd0f04a85bf66c58ae662f, type: 2}
+  DirtyMaterial: {fileID: 0}
+  OutlinedDirtyMaterial: {fileID: 0}
+  ItemType: 0
+  ItemRenderer: {fileID: 0}
+  PositivePointsIfEat: 0
+  NegativePointsIfEat: 0
+  PositivePointsIfPlay: 0
+  NegativePointsIfPlay: 0
+  ChanceOfSuccesFood: 0
+  ChanceOfSuccesToy: 0
+  ChanceOfRandomAction: 5
+  IsDiaperDirty: 0
+--- !u!114 &642831193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011041813418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67278f0c6454e424f8e9f4428615353e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StinkyCloud: {fileID: 0}
+  BasicMaterial: {fileID: 0}
+  OutlinedMaterial: {fileID: 0}
+  DirtyMaterial: {fileID: 0}
+  OutlinedDirtyMaterial: {fileID: 0}
+  ItemType: 0
+  ItemRenderer: {fileID: 0}
+  PositivePointsIfEat: 0
+  NegativePointsIfEat: 0
+  PositivePointsIfPlay: 0
+  NegativePointsIfPlay: 0
+  ChanceOfSuccesFood: 0
+  ChanceOfSuccesToy: 0
+  ChanceOfRandomAction: 5
+  IsDiaperDirty: 0
+--- !u!64 &642831192
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,6 +166,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 394abde96a03bb24c9dea260a13f1475, type: 3}

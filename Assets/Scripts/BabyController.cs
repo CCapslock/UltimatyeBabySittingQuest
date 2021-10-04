@@ -41,8 +41,8 @@ public class BabyController : MonoBehaviour
 	public float HappyMeter = 60f;
 
 	private UIController _uiController;
-	private BabyState _currentState;
-	private BabyState _lastEmotionState;
+	[SerializeField] private BabyState _currentState;
+	[SerializeField] private BabyState _lastEmotionState;
 
 	//eatingStuff
 	private Animator _babyAnimator;
@@ -62,7 +62,7 @@ public class BabyController : MonoBehaviour
 		_uiController = GetComponent<UIController>();
 		_diaperOnPelvisPosition = Diaper.localPosition;
 		_diaperOnPelvisRotation = Diaper.rotation;
-		_uiController.SetEmojiParticles(EmojiType.neutral);
+		MakecorrectEmoji();
 		_lastEmotionState = BabyState.Neutral;
 	}
 	public void StartTheBaby()
@@ -98,15 +98,12 @@ public class BabyController : MonoBehaviour
 			{
 				case 0:
 					MakeUpsetAction(UpsetActions.Cry);
-					_uiController.SetEmojiParticles(EmojiType.cry);
 					break;
 				case 1:
 					MakeUpsetAction(UpsetActions.Poop);
-					_uiController.SetEmojiParticles(EmojiType.poop);
 					break;
 				case 2:
 					MakeUpsetAction(UpsetActions.Ill);
-					_uiController.SetEmojiParticles(EmojiType.ill);
 					break;
 			}
 		}
@@ -115,6 +112,11 @@ public class BabyController : MonoBehaviour
 			WaitBeforeUpsetAction();
 		}
 	}
+	private void TurnOffCry()
+	{
+		if (_currentState == BabyState.Cry)
+			_currentState = BabyState.Neutral;
+	}
 	private void MakeUpsetAction(UpsetActions action)
 	{
 		switch (action)
@@ -122,7 +124,9 @@ public class BabyController : MonoBehaviour
 			case UpsetActions.Cry:
 				_babyAnimator.SetTrigger("Cry");
 				HappyMeter -= CryUppsetNumber;
+				_currentState = BabyState.Cry;
 				TurnOfBusy();
+				Invoke(nameof(TurnOffCry), 2f);
 				break;
 			case UpsetActions.Poop:
 				_babyAnimator.SetTrigger("Poop");
@@ -156,12 +160,10 @@ public class BabyController : MonoBehaviour
 					break;
 				case ItemType.Toy:
 					PlayWithItem(item);
-					_uiController.SetEmojiParticles(EmojiType.play);
 					break;
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
 					{
-						_uiController.SetEmojiParticles(EmojiType.clap);
 						WearDiaper(item);
 						item.WearDiaper();
 					}
@@ -169,11 +171,11 @@ public class BabyController : MonoBehaviour
 				case ItemType.Medicine:
 					_lastUsedItem = item;
 					_itemTransform = item.transform;
-					_uiController.SetEmojiParticles(EmojiType.clap);
 					MakeMedicineFeedBack();
 					DestroyObject();
 					break;
 			}
+			MakecorrectEmoji();
 			return true;
 		}
 		else
@@ -183,15 +185,15 @@ public class BabyController : MonoBehaviour
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
 					{
-						_uiController.SetEmojiParticles(EmojiType.clap);
+						MakecorrectEmoji();
 						WearDiaper(item);
 						item.WearDiaper();
 					}
 					return true;
 				case ItemType.Medicine:
 					_lastUsedItem = item;
-					_itemTransform = item.transform;
-					_uiController.SetEmojiParticles(EmojiType.clap);
+					_itemTransform = item.transform; 
+					MakecorrectEmoji();
 					MakeMedicineFeedBack();
 					DestroyObject();
 					return true;
@@ -299,7 +301,7 @@ public class BabyController : MonoBehaviour
 		}
 
 		TurnOfBusy();
-		MakecorrectEmoji();
+		Invoke(nameof(MakecorrectEmoji), 1f);
 	}
 	private void ThrowAwayItem()
 	{
@@ -331,7 +333,7 @@ public class BabyController : MonoBehaviour
 		}
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
-		MakecorrectEmoji();
+		Invoke(nameof(MakecorrectEmoji), 1f);
 		TurnOfBusy();
 	}
 	private void DestroyObject()
@@ -364,8 +366,8 @@ public class BabyController : MonoBehaviour
 			Invoke(nameof(StopVomiting), VomitingAnimationLenght);
 		}
 		TurnOfBusy();
-		DecideImpression(); 
-		MakecorrectEmoji();
+		DecideImpression();
+		Invoke(nameof(MakecorrectEmoji), 1f);
 		_uiController.SetSlider(HappyMeter);
 	}
 	private void DecideImpression()
@@ -376,27 +378,27 @@ public class BabyController : MonoBehaviour
 		_babyAnimator.SetBool("Neutral", false);
 		if (HappyMeter >= 75)
 		{
-				_lastEmotionState = BabyState.Happy;
-				_babyAnimator.SetBool("Happy", true); 
-				MakecorrectEmoji();
+			_lastEmotionState = BabyState.Happy;
+			_babyAnimator.SetBool("Happy", true);
+			MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 50 && HappyMeter < 75)
 		{
-				_lastEmotionState = BabyState.Neutral;
-				_babyAnimator.SetBool("Neutral", true);
-				MakecorrectEmoji();
+			_lastEmotionState = BabyState.Neutral;
+			_babyAnimator.SetBool("Neutral", true);
+			MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 25 && HappyMeter < 50)
 		{
-				_lastEmotionState = BabyState.Angry;
-				_babyAnimator.SetBool("Angry", true);
-				MakecorrectEmoji();
+			_lastEmotionState = BabyState.Angry;
+			_babyAnimator.SetBool("Angry", true);
+			MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 0 && HappyMeter < 25)
 		{
-				_lastEmotionState = BabyState.Upset;
-				_babyAnimator.SetBool("Sad", true);
-				MakecorrectEmoji();
+			_lastEmotionState = BabyState.Upset;
+			_babyAnimator.SetBool("Sad", true);
+			MakecorrectEmoji();
 		}
 		else if (HappyMeter <= 0)
 		{
@@ -409,21 +411,7 @@ public class BabyController : MonoBehaviour
 	}
 	private void MakecorrectEmoji()
 	{
-		switch (_lastEmotionState)
-		{
-			case BabyState.Neutral:
-				_uiController.SetEmojiParticles(EmojiType.neutral);
-				break;
-			case BabyState.Happy:
-				_uiController.SetEmojiParticles(EmojiType.happy);
-				break;
-			case BabyState.Upset:
-				_uiController.SetEmojiParticles(EmojiType.sad);
-				break;
-			case BabyState.Angry:
-				_uiController.SetEmojiParticles(EmojiType.angry);
-				break;
-		}
+				_uiController.SetEmoji(_lastEmotionState, _currentState);
 	}
 }
 public enum BabyState
@@ -433,7 +421,8 @@ public enum BabyState
 	Upset = 2,
 	Angry = 3,
 	Ill = 4,
-	Pooped = 5
+	Pooped = 5,
+	Cry = 6
 }
 public enum UpsetActions
 {

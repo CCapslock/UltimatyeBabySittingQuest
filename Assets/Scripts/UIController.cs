@@ -100,13 +100,38 @@ public class UIController : MonoBehaviour
 		MinutesLeft = (seconds / 60);
 		TimerText.text = (MinutesLeft + " : " + (seconds - MinutesLeft * 60));
 	}
-	public void SetEmojiParticles(EmojiType type)
+	public void SetEmoji(BabyState emotion, BabyState State)
 	{
-		try
+		if(State == BabyState.Neutral)
 		{
-			_lastUsedParticle.Stop();
+			if (emotion == BabyState.Neutral)
+			{
+				Emoji.sprite = ParticleNeutral;
+			}
+			if (emotion == BabyState.Happy)
+			{
+				Emoji.sprite = ParticleIll;
+			}
+			if (State == BabyState.Angry)
+			{
+				Emoji.sprite = ParticleAngry;
+			}
+			if (State == BabyState.Upset)
+			{
+				Emoji.sprite = ParticleSad;
+			}
 		}
-		catch { }
+		else
+		{
+			if(State == BabyState.Pooped)
+			{
+				Emoji.sprite = ParticlePoop;
+			}
+			if(State == BabyState.Ill)
+			{
+				Emoji.sprite = ParticleHappy;
+			}
+		}/*
 		switch (type)
 		{
 			case EmojiType.neutral:
@@ -136,7 +161,7 @@ public class UIController : MonoBehaviour
 			case EmojiType.poop:
 				Emoji.sprite = ParticlePoop;
 				break;
-		}
+		}*/
 	}
 	private void AddStar()
 	{
