@@ -15,6 +15,7 @@ public class BabyController : MonoBehaviour
 	public float CryUppsetNumber;
 	public float PoopUppsetNumber;
 	public float IllnessNegativePoints;
+	public Vector3 ThrowAwayVector;
 
 	[Foldout("Animation Parameters")]
 	public float EatingAnimationLenght;
@@ -23,7 +24,7 @@ public class BabyController : MonoBehaviour
 	[Foldout("Animation Parameters")]
 	public float TimeBeforeGoodToyDisapear;
 	[Foldout("Animation Parameters")]
-	public float TimeBeforeBadToyDisapear;
+	public float TimeBeforeBadToyThrow;
 	[Foldout("Animation Parameters")]
 	public float VomitingAnimationLenght;
 	[Foldout("Animation Parameters")]
@@ -60,6 +61,7 @@ public class BabyController : MonoBehaviour
 		_uiController = GetComponent<UIController>();
 		_diaperOnPelvisPosition = Diaper.localPosition;
 		_diaperOnPelvisRotation = Diaper.rotation;
+		_uiController.SetEmojiParticles(EmojiType.neutral);
 	}
 	public void StartTheBaby()
 	{
@@ -78,7 +80,7 @@ public class BabyController : MonoBehaviour
 	{
 		HappyMeter -= IllnessNegativePoints;
 		_uiController.SetSlider(HappyMeter);
-		DecideImpression();
+		//DecideImpression();
 	}
 	private void WaitBeforeUpsetAction()
 	{
@@ -94,12 +96,15 @@ public class BabyController : MonoBehaviour
 			{
 				case 0:
 					MakeUpsetAction(UpsetActions.Cry);
+					_uiController.SetEmojiParticles(EmojiType.cry);
 					break;
 				case 1:
 					MakeUpsetAction(UpsetActions.Poop);
+					_uiController.SetEmojiParticles(EmojiType.poop);
 					break;
 				case 2:
 					MakeUpsetAction(UpsetActions.Ill);
+					_uiController.SetEmojiParticles(EmojiType.ill);
 					break;
 			}
 		}
@@ -149,12 +154,20 @@ public class BabyController : MonoBehaviour
 					break;
 				case ItemType.Toy:
 					PlayWithItem(item);
+					_uiController.SetEmojiParticles(EmojiType.play);
 					break;
 				case ItemType.Diper:
-					WearDiaper(item);
+					if (_currentState == BabyState.Pooped)
+					{
+						_uiController.SetEmojiParticles(EmojiType.clap);
+						WearDiaper(item);
+						item.WearDiaper();
+					}
 					break;
 				case ItemType.Medicine:
+					_lastUsedItem = item;
 					_itemTransform = item.transform;
+					_uiController.SetEmojiParticles(EmojiType.clap);
 					MakeMedicineFeedBack();
 					DestroyObject();
 					break;
@@ -167,12 +180,16 @@ public class BabyController : MonoBehaviour
 			{
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
+					{
+						_uiController.SetEmojiParticles(EmojiType.clap);
 						WearDiaper(item);
-					item.WearDiaper();
+						item.WearDiaper();
+					}
 					return true;
 				case ItemType.Medicine:
-					Debug.Log("EatMedicine");
+					_lastUsedItem = item;
 					_itemTransform = item.transform;
+					_uiController.SetEmojiParticles(EmojiType.clap);
 					MakeMedicineFeedBack();
 					DestroyObject();
 					return true;
@@ -248,7 +265,7 @@ public class BabyController : MonoBehaviour
 	private void PlayWithItem(DragAbleObject item)
 	{
 		int num = Random.Range(1, 100);
-		if (num <= item.ChanceOfSucces)
+		if (num <= item.ChanceOfSuccesToy)
 		{
 			//goodresult
 			HappyMeter -= item.PositivePointsIfPlay;
@@ -261,12 +278,12 @@ public class BabyController : MonoBehaviour
 			_itemTransform.parent = TransformForItem;
 			_itemTransform.localPosition = Vector3.zero;
 			_itemTransform.gameObject.layer = 0;
-			Invoke(nameof(DestroyObject), TimeBeforeFoodDisapear);
+			Invoke(nameof(DestroyObject), TimeBeforeGoodToyDisapear);
 		}
 		else
 		{
 			//badresult
-			HappyMeter -= item.NegativePointsIfPlay;//goodresult
+			HappyMeter -= item.NegativePointsIfPlay;
 			_lastUsedItem = item;
 			_babyAnimator.SetTrigger("BadPlay");
 			_itemTransform = item.transform;
@@ -276,13 +293,21 @@ public class BabyController : MonoBehaviour
 			_itemTransform.parent = TransformForItem;
 			_itemTransform.localPosition = Vector3.zero;
 			_itemTransform.gameObject.layer = 0;
+			Invoke(nameof(ThrowAwayItem), TimeBeforeBadToyThrow);
 		}
 
 		TurnOfBusy();
 	}
+	private void ThrowAwayItem()
+	{
+			_itemRigidbody.isKinematic = false;
+		_itemRigidbody.useGravity = true;
+		_itemTransform.parent = null;
+		_itemRigidbody.AddForce(ThrowAwayVector * 1000f);
+	}
 	private void MakeFoodFeedBack()
 	{
-		CalculateFoodFeedback(_lastUsedItem.ChanceOfSucces, _lastUsedItem.PositivePointsIfEat, _lastUsedItem.NegativePointsIfEat);
+		CalculateFoodFeedback(_lastUsedItem.ChanceOfSuccesFood, _lastUsedItem.PositivePointsIfEat, _lastUsedItem.NegativePointsIfEat);
 	}
 	private void MakeMedicineFeedBack()
 	{
@@ -347,18 +372,22 @@ public class BabyController : MonoBehaviour
 		if (HappyMeter >= 75)
 		{
 			_babyAnimator.SetBool("Happy", true);
+			_uiController.SetEmojiParticles(EmojiType.happy);
 		}
 		else if (HappyMeter >= 50 && HappyMeter < 75)
 		{
 			_babyAnimator.SetBool("Neutral", true);
+			_uiController.SetEmojiParticles(EmojiType.neutral);
 		}
 		else if (HappyMeter >= 25 && HappyMeter < 50)
 		{
 			_babyAnimator.SetBool("Angry", true);
+			_uiController.SetEmojiParticles(EmojiType.angry);
 		}
 		else if (HappyMeter >= 0 && HappyMeter < 25)
 		{
 			_babyAnimator.SetBool("Sad", true);
+			_uiController.SetEmojiParticles(EmojiType.happy);
 		}
 		else if (HappyMeter <= 0)
 		{
