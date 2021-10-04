@@ -129,12 +129,15 @@ MonoBehaviour:
   StinkyCloud: {fileID: 0}
   BasicMaterial: {fileID: 2100000, guid: 049e560d74639f44faebfb8ff1094f02, type: 2}
   OutlinedMaterial: {fileID: 2100000, guid: dde02c7f77223b84c91bf65ca8c620d8, type: 2}
+  DirtyMaterial: {fileID: 0}
+  OutlinedDirtyMaterial: {fileID: 0}
   ItemType: 0
   ItemRenderer: {fileID: 8748034367472627636}
   PositivePointsIfEat: 20
   NegativePointsIfEat: 2
   PositivePointsIfPlay: 0
   NegativePointsIfPlay: 0
-  ChanceOfSucces: 80
+  ChanceOfSuccesFood: 80
+  ChanceOfSuccesToy: 0
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0

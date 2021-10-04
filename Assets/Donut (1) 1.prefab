@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8748034367472627636}
   - component: {fileID: 8748034367472627634}
   - component: {fileID: 8748034367472627635}
-  - component: {fileID: 6551884767945498648}
+  - component: {fileID: 451157072879505449}
   m_Layer: 0
   m_Name: Donut (1) 1
   m_TagString: DragAble
@@ -115,16 +115,19 @@ MonoBehaviour:
   StinkyCloud: {fileID: 0}
   BasicMaterial: {fileID: 2100000, guid: 049e560d74639f44faebfb8ff1094f02, type: 2}
   OutlinedMaterial: {fileID: 2100000, guid: dde02c7f77223b84c91bf65ca8c620d8, type: 2}
+  DirtyMaterial: {fileID: 0}
+  OutlinedDirtyMaterial: {fileID: 0}
   ItemType: 0
   ItemRenderer: {fileID: 8748034367472627636}
   PositivePointsIfEat: 20
   NegativePointsIfEat: 2
   PositivePointsIfPlay: 0
   NegativePointsIfPlay: 0
-  ChanceOfSucces: 80
+  ChanceOfSuccesFood: 0
+  ChanceOfSuccesToy: 0
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0
---- !u!64 &6551884767945498648
+--- !u!64 &451157072879505449
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

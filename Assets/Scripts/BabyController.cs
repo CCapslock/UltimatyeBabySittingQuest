@@ -42,6 +42,7 @@ public class BabyController : MonoBehaviour
 
 	private UIController _uiController;
 	private BabyState _currentState;
+	private BabyState _lastEmotionState;
 
 	//eatingStuff
 	private Animator _babyAnimator;
@@ -62,6 +63,7 @@ public class BabyController : MonoBehaviour
 		_diaperOnPelvisPosition = Diaper.localPosition;
 		_diaperOnPelvisRotation = Diaper.rotation;
 		_uiController.SetEmojiParticles(EmojiType.neutral);
+		_lastEmotionState = BabyState.Neutral;
 	}
 	public void StartTheBaby()
 	{
@@ -80,7 +82,7 @@ public class BabyController : MonoBehaviour
 	{
 		HappyMeter -= IllnessNegativePoints;
 		_uiController.SetSlider(HappyMeter);
-		//DecideImpression();
+		DecideImpression();
 	}
 	private void WaitBeforeUpsetAction()
 	{
@@ -297,10 +299,11 @@ public class BabyController : MonoBehaviour
 		}
 
 		TurnOfBusy();
+		MakecorrectEmoji();
 	}
 	private void ThrowAwayItem()
 	{
-			_itemRigidbody.isKinematic = false;
+		_itemRigidbody.isKinematic = false;
 		_itemRigidbody.useGravity = true;
 		_itemTransform.parent = null;
 		_itemRigidbody.AddForce(ThrowAwayVector * 1000f);
@@ -328,6 +331,7 @@ public class BabyController : MonoBehaviour
 		}
 		DecideImpression();
 		_uiController.SetSlider(HappyMeter);
+		MakecorrectEmoji();
 		TurnOfBusy();
 	}
 	private void DestroyObject()
@@ -360,7 +364,8 @@ public class BabyController : MonoBehaviour
 			Invoke(nameof(StopVomiting), VomitingAnimationLenght);
 		}
 		TurnOfBusy();
-		DecideImpression();
+		DecideImpression(); 
+		MakecorrectEmoji();
 		_uiController.SetSlider(HappyMeter);
 	}
 	private void DecideImpression()
@@ -371,23 +376,27 @@ public class BabyController : MonoBehaviour
 		_babyAnimator.SetBool("Neutral", false);
 		if (HappyMeter >= 75)
 		{
-			_babyAnimator.SetBool("Happy", true);
-			_uiController.SetEmojiParticles(EmojiType.happy);
+				_lastEmotionState = BabyState.Happy;
+				_babyAnimator.SetBool("Happy", true); 
+				MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 50 && HappyMeter < 75)
 		{
-			_babyAnimator.SetBool("Neutral", true);
-			_uiController.SetEmojiParticles(EmojiType.neutral);
+				_lastEmotionState = BabyState.Neutral;
+				_babyAnimator.SetBool("Neutral", true);
+				MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 25 && HappyMeter < 50)
 		{
-			_babyAnimator.SetBool("Angry", true);
-			_uiController.SetEmojiParticles(EmojiType.angry);
+				_lastEmotionState = BabyState.Angry;
+				_babyAnimator.SetBool("Angry", true);
+				MakecorrectEmoji();
 		}
 		else if (HappyMeter >= 0 && HappyMeter < 25)
 		{
-			_babyAnimator.SetBool("Sad", true);
-			_uiController.SetEmojiParticles(EmojiType.happy);
+				_lastEmotionState = BabyState.Upset;
+				_babyAnimator.SetBool("Sad", true);
+				MakecorrectEmoji();
 		}
 		else if (HappyMeter <= 0)
 		{
@@ -396,6 +405,24 @@ public class BabyController : MonoBehaviour
 		else if (HappyMeter >= 100)
 		{
 			//выиграл
+		}
+	}
+	private void MakecorrectEmoji()
+	{
+		switch (_lastEmotionState)
+		{
+			case BabyState.Neutral:
+				_uiController.SetEmojiParticles(EmojiType.neutral);
+				break;
+			case BabyState.Happy:
+				_uiController.SetEmojiParticles(EmojiType.happy);
+				break;
+			case BabyState.Upset:
+				_uiController.SetEmojiParticles(EmojiType.sad);
+				break;
+			case BabyState.Angry:
+				_uiController.SetEmojiParticles(EmojiType.angry);
+				break;
 		}
 	}
 }

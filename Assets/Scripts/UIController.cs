@@ -8,18 +8,19 @@ public class UIController : MonoBehaviour
 	public TMP_Text TimerText;
 	public GameObject StartPanel;
 	public GameObject EndPanel;
-	public ParticleSystem ParticleNeutral;
-	public ParticleSystem ParticleAngry;
-	public ParticleSystem ParticleSad;
-	public ParticleSystem ParticleHappy;
-	public ParticleSystem ParticleClap;
-	public ParticleSystem ParticleCry;
-	public ParticleSystem ParticleIll;
-	public ParticleSystem ParticlePlay;
-	public ParticleSystem ParticlePoop;
+	public Sprite ParticleNeutral;
+	public Sprite ParticleAngry;
+	public Sprite ParticleSad;
+	public Sprite ParticleHappy;
+	public Sprite ParticleClap;
+	public Sprite ParticleCry;
+	public Sprite ParticleIll;
+	public Sprite ParticlePlay;
+	public Sprite ParticlePoop;
 
 	public Sprite FullStar;
 
+	public Image Emoji;
 	public Image FirstStar;
 	public Image SecondStar;
 	public Image ThirdStar;
@@ -33,10 +34,6 @@ public class UIController : MonoBehaviour
 	private int _collectedStars;
 	private bool _needToEncreaseSlider;
 	private bool _needToDecreaseSlider;
-	private void Start()
-	{
-		StopEmojis();
-	}
 	public void SetSlider(float amount)
 	{
 		RequestedSliderNum = amount;
@@ -52,17 +49,6 @@ public class UIController : MonoBehaviour
 			EncreaseSlider();
 		if (_needToDecreaseSlider)
 			DecreaseSlider();
-	}
-	private void StopEmojis()
-	{
-		ParticleNeutral.Stop();
-		ParticleHappy.Stop();
-		ParticleAngry.Stop();
-		ParticleSad.Stop();
-		ParticleCry.Stop();
-		ParticleIll.Stop();
-		ParticlePlay.Stop();
-		ParticlePoop.Stop();
 	}
 	public void OpenGameWindow()
 	{
@@ -124,40 +110,31 @@ public class UIController : MonoBehaviour
 		switch (type)
 		{
 			case EmojiType.neutral:
-				ParticleNeutral.Play();
-				_lastUsedParticle = ParticleNeutral;
+				Emoji.sprite = ParticleNeutral;
 				break;
 			case EmojiType.happy:
-				ParticleHappy.Play();
-				_lastUsedParticle = ParticleHappy;
+				Emoji.sprite = ParticleHappy;
 				break;
 			case EmojiType.angry:
-				ParticleAngry.Play();
-				_lastUsedParticle = ParticleAngry;
+				Emoji.sprite = ParticleAngry;
 				break;
 			case EmojiType.sad:
-				ParticleSad.Play();
-				_lastUsedParticle = ParticleSad;
+				Emoji.sprite = ParticleSad;
 				break;
 			case EmojiType.cry:
-				ParticleCry.Play();
-				_lastUsedParticle = ParticleCry;
+				Emoji.sprite = ParticleCry;
 				break;
 			case EmojiType.ill:
-				ParticleIll.Play();
-				_lastUsedParticle = ParticleIll;
+				Emoji.sprite = ParticleIll;
 				break;
 			case EmojiType.play:
-				ParticlePlay.Play();
-				_lastUsedParticle = ParticlePlay;
+				Emoji.sprite = ParticlePlay;
 				break;
 			case EmojiType.clap:
-				ParticleClap.Play();
-				_lastUsedParticle = ParticleClap;
+				Emoji.sprite = ParticleClap;
 				break;
 			case EmojiType.poop:
-				ParticlePoop.Play();
-				_lastUsedParticle = ParticlePoop;
+				Emoji.sprite = ParticlePoop;
 				break;
 		}
 	}
