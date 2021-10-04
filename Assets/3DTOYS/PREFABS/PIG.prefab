@@ -103,14 +103,14 @@ MonoBehaviour:
   OutlinedMaterial: {fileID: 2100000, guid: 616496043adf37b4c937af2ee958657f, type: 2}
   DirtyMaterial: {fileID: 0}
   OutlinedDirtyMaterial: {fileID: 0}
-  ItemType: 0
+  ItemType: 1
   ItemRenderer: {fileID: 0}
   PositivePointsIfEat: 0
   NegativePointsIfEat: 0
-  PositivePointsIfPlay: 0
+  PositivePointsIfPlay: 4
   NegativePointsIfPlay: 0
   ChanceOfSuccesFood: 0
-  ChanceOfSuccesToy: 0
+  ChanceOfSuccesToy: 65
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0
 --- !u!64 &3240987531786795613
@@ -174,13 +174,13 @@ MonoBehaviour:
   OutlinedMaterial: {fileID: 0}
   DirtyMaterial: {fileID: 0}
   OutlinedDirtyMaterial: {fileID: 0}
-  ItemType: 0
+  ItemType: 1
   ItemRenderer: {fileID: 0}
   PositivePointsIfEat: 0
   NegativePointsIfEat: 0
-  PositivePointsIfPlay: 0
+  PositivePointsIfPlay: 4
   NegativePointsIfPlay: 0
   ChanceOfSuccesFood: 0
-  ChanceOfSuccesToy: 0
+  ChanceOfSuccesToy: 65
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0

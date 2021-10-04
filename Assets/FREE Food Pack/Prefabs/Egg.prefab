@@ -133,11 +133,11 @@ MonoBehaviour:
   OutlinedDirtyMaterial: {fileID: 0}
   ItemType: 0
   ItemRenderer: {fileID: 0}
-  PositivePointsIfEat: 0
-  NegativePointsIfEat: 0
+  PositivePointsIfEat: 4
+  NegativePointsIfEat: 2
   PositivePointsIfPlay: 0
   NegativePointsIfPlay: 0
-  ChanceOfSuccesFood: 0
+  ChanceOfSuccesFood: 75
   ChanceOfSuccesToy: 0
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0
