@@ -2217,6 +2217,7 @@ MonoBehaviour:
   TimerText: {fileID: 440260928}
   StartPanel: {fileID: 66799938}
   EndPanel: {fileID: 904427859}
+  LosePanel: {fileID: 180777942774227291}
   ParticleNeutral: {fileID: 21300000, guid: dafeb3f0fbf3e75449ca68e1d6195d84, type: 3}
   ParticleAngry: {fileID: 21300000, guid: 0e7bd246c74d77944b9ff9cb3dfa9bb5, type: 3}
   ParticleSad: {fileID: 21300000, guid: dede9400561424d4ea636df766dbb13e, type: 3}
@@ -2226,7 +2227,13 @@ MonoBehaviour:
   ParticleIll: {fileID: 21300000, guid: 7459bff9594199d4fa805edd8690f45e, type: 3}
   ParticlePlay: {fileID: 21300000, guid: 8c0e787759f59b94ba6c951a39682416, type: 3}
   ParticlePoop: {fileID: 21300000, guid: d6b8ff0936f1167478d95f7f3767315c, type: 3}
+  Yellow: {fileID: 21300000, guid: 50b9096e0e8c07442966fc1d25e46566, type: 3}
+  Green: {fileID: 21300000, guid: 9b0c799687fdc7c498a5840d3d497f0e, type: 3}
+  Orange: {fileID: 21300000, guid: 5411bbd82ba85034dbc70344e13c732d, type: 3}
+  Red: {fileID: 21300000, guid: a198e068464ec0d479dbaa29c134dd8b, type: 3}
+  Slider: {fileID: 1294735978}
   FullStar: {fileID: 21300000, guid: 5537373d370892647a6ea8b90ad777fc, type: 3}
+  SliderFill: {fileID: 1091862704}
   Emoji: {fileID: 180777942774227290}
   FirstStar: {fileID: 180777942774227295}
   SecondStar: {fileID: 180777942774227294}
@@ -2744,7 +2751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1328030674141573786, guid: 4ee73a1c9aea3354191bcce8953e90df, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.467001
+      value: 7.657
       objectReference: {fileID: 0}
     - target: {fileID: 1328030674141573786, guid: 4ee73a1c9aea3354191bcce8953e90df, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2789,6 +2796,10 @@ PrefabInstance:
     - target: {fileID: 1711031184906242633, guid: 4ee73a1c9aea3354191bcce8953e90df, type: 3}
       propertyPath: m_IsKinematic
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8351132173015921990, guid: 4ee73a1c9aea3354191bcce8953e90df, type: 3}
+      propertyPath: ChanceOfRandomAction
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ee73a1c9aea3354191bcce8953e90df, type: 3}
@@ -4100,6 +4111,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da7880317cad2524a93cbb6056bbc922, type: 3}
+--- !u!82 &547287624 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1140814467183072500, guid: 7be95d05914256448a0c970b87841743, type: 3}
+  m_PrefabInstance: {fileID: 789835175}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &548803804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: a11d318bf37c01d489a19dc2dc33ed7d, type: 3}
@@ -6447,10 +6463,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5950cf65f6831ae478b1e88be375462a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Effects: {fileID: 1143864079}
+  music: {fileID: 547287624}
   Baby: {fileID: 1729538494}
   Take: {fileID: 0}
-  Throw: {fileID: 0}
+  Throw: {fileID: 8300000, guid: 330f9d688621e1a439d2e753cbcb67c8, type: 3}
   Use: {fileID: 0}
 --- !u!1 &886026610
 GameObject:
@@ -7746,6 +7762,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400010, guid: 7d0701320ee303d439feed9498b8d336, type: 3}
   m_PrefabInstance: {fileID: 721532429}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1091862704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7871205661803593425, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
+  m_PrefabInstance: {fileID: 180777942774227289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1094172416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8093,11 +8120,6 @@ ParticleSystem:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400010, guid: c40901a6f4f184102bb15d1a0537c32c, type: 3}
   m_PrefabInstance: {fileID: 654555538}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &1143864079 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 2006916219339221361, guid: 7be95d05914256448a0c970b87841743, type: 3}
-  m_PrefabInstance: {fileID: 789835175}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1150023273 stripped
 Transform:
@@ -8882,6 +8904,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da7880317cad2524a93cbb6056bbc922, type: 3}
+--- !u!95 &1294735978 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6637037296445229438, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
+  m_PrefabInstance: {fileID: 180777942774227289}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1298922054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14463,10 +14490,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 180777943534983178, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 3618674352437750978, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 329114134}
     - target: {fileID: 7871205661684507999, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14640,6 +14667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &180777942774227291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6340515748687373551, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}
+  m_PrefabInstance: {fileID: 180777942774227289}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &180777942774227293 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5268558620926887568, guid: 451ffa90a66ee0941a7a1fcf696ed727, type: 3}

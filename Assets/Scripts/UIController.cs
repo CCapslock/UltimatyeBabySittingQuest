@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 using TMPro;
 
 public class UIController : MonoBehaviour
@@ -8,6 +9,7 @@ public class UIController : MonoBehaviour
 	public TMP_Text TimerText;
 	public GameObject StartPanel;
 	public GameObject EndPanel;
+	public GameObject LosePanel;
 	public Sprite ParticleNeutral;
 	public Sprite ParticleAngry;
 	public Sprite ParticleSad;
@@ -17,9 +19,16 @@ public class UIController : MonoBehaviour
 	public Sprite ParticleIll;
 	public Sprite ParticlePlay;
 	public Sprite ParticlePoop;
+	public Sprite Yellow;
+	public Sprite Green;
+	public Sprite Orange;
+	public Sprite Red;
+	public Animator Slider;
+
 
 	public Sprite FullStar;
 
+	public Image SliderFill;
 	public Image Emoji;
 	public Image FirstStar;
 	public Image SecondStar;
@@ -34,14 +43,40 @@ public class UIController : MonoBehaviour
 	private int _collectedStars;
 	private bool _needToEncreaseSlider;
 	private bool _needToDecreaseSlider;
+	private SliderColor _currentColor;
 	public void SetSlider(float amount)
 	{
 		RequestedSliderNum = amount;
 		if (amount > HappySlider.value)
+		{
 			_needToEncreaseSlider = true;
+		}
 		else
+		{
+			Slider.SetTrigger("StartShake");
 			_needToDecreaseSlider = true;
+		}
 		Happyiness = amount;
+		if (Happyiness > 75)
+		{
+			SliderFill.sprite = Green;
+			_currentColor = SliderColor.green;
+		}
+		if (Happyiness > 50 && Happyiness < 75)
+		{
+			SliderFill.sprite = Yellow;
+			_currentColor = SliderColor.yellow;
+		}
+		if (Happyiness > 25 && Happyiness < 50)
+		{
+			SliderFill.sprite = Orange;
+			_currentColor = SliderColor.orange;
+		}
+		if (Happyiness < 25)
+		{
+			SliderFill.sprite = Red;
+			_currentColor = SliderColor.red;
+		}
 	}
 	private void FixedUpdate()
 	{
@@ -74,7 +109,8 @@ public class UIController : MonoBehaviour
 		}
 		if (Happyiness < 25)
 		{
-
+			EndPanel.SetActive(false);
+			LosePanel.SetActive(true);
 		}
 	}
 	private void EncreaseSlider()
@@ -93,16 +129,26 @@ public class UIController : MonoBehaviour
 		{
 			_needToDecreaseSlider = false;
 			HappySlider.value = RequestedSliderNum;
+			Slider.SetTrigger("StopShake");
 		}
 	}
 	public void SetTime(int seconds)
 	{
 		MinutesLeft = (seconds / 60);
-		TimerText.text = (MinutesLeft + " : " + (seconds - MinutesLeft * 60));
+		{
+			if (seconds - MinutesLeft * 60 > 10)
+			{
+				TimerText.text = (MinutesLeft + " : " + (seconds - MinutesLeft * 60));
+			}
+			else
+			{
+				TimerText.text = (MinutesLeft + " : 0" + (seconds - MinutesLeft * 60));
+			}
+		}
 	}
 	public void SetEmoji(BabyState emotion, BabyState State)
 	{
-		if(State == BabyState.Neutral)
+		if (State == BabyState.Neutral)
 		{
 			if (emotion == BabyState.Neutral)
 			{
@@ -112,24 +158,28 @@ public class UIController : MonoBehaviour
 			{
 				Emoji.sprite = ParticleIll;
 			}
-			if (State == BabyState.Angry)
+			if (emotion == BabyState.Angry)
 			{
 				Emoji.sprite = ParticleAngry;
 			}
-			if (State == BabyState.Upset)
+			if (emotion == BabyState.Upset)
 			{
 				Emoji.sprite = ParticleSad;
 			}
 		}
 		else
 		{
-			if(State == BabyState.Pooped)
+			if (State == BabyState.Pooped)
 			{
 				Emoji.sprite = ParticlePoop;
 			}
-			if(State == BabyState.Ill)
+			if (State == BabyState.Cry)
 			{
-				Emoji.sprite = ParticleHappy;
+				Emoji.sprite = ParticleCry;
+			}
+			if (State == BabyState.Ill)
+			{
+				Emoji.sprite = ParticleIll;
 			}
 		}/*
 		switch (type)
@@ -181,6 +231,13 @@ public class UIController : MonoBehaviour
 		}
 		_collectedStars++;
 	}
+}
+public enum SliderColor
+{
+	green = 0,
+	yellow = 1,
+	orange = 2,
+	red = 3
 }
 public enum EmojiType
 {

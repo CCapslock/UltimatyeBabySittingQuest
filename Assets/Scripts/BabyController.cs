@@ -54,7 +54,7 @@ public class BabyController : MonoBehaviour
 	private Vector3 _diaperOnPelvisPosition;
 	private Quaternion _diaperOnPelvisRotation;
 
-	[SerializeField] private bool _isBusy;
+	[SerializeField] private bool _isBusy; private int _randomNum;
 
 	private void Start()
 	{
@@ -116,6 +116,7 @@ public class BabyController : MonoBehaviour
 	{
 		if (_currentState == BabyState.Cry)
 			_currentState = BabyState.Neutral;
+		MakecorrectEmoji();
 	}
 	private void MakeUpsetAction(UpsetActions action)
 	{
@@ -152,20 +153,42 @@ public class BabyController : MonoBehaviour
 	{
 		if (!_isBusy)
 		{
+			_randomNum = Random.Range(1, 100);
 			_isBusy = true;
 			switch (item.ItemType)
 			{
 				case ItemType.Food:
-					EatItem(item);
+					if (_randomNum <= item.ChanceOfRandomAction)
+					{
+						PlayWithItem(item);
+					}
+					else
+					{
+						EatItem(item);
+					}
 					break;
 				case ItemType.Toy:
-					PlayWithItem(item);
+					if (_randomNum <= item.ChanceOfRandomAction)
+					{
+						EatItem(item);
+					}
+					else
+					{
+						PlayWithItem(item);
+					}
 					break;
 				case ItemType.Diper:
 					if (_currentState == BabyState.Pooped)
 					{
 						WearDiaper(item);
 						item.WearDiaper();
+					}
+					else
+					{
+						if ((_randomNum <= item.ChanceOfRandomAction))
+						{
+							EatItem(item);
+						}
 					}
 					break;
 				case ItemType.Medicine:
@@ -192,7 +215,7 @@ public class BabyController : MonoBehaviour
 					return true;
 				case ItemType.Medicine:
 					_lastUsedItem = item;
-					_itemTransform = item.transform; 
+					_itemTransform = item.transform;
 					MakecorrectEmoji();
 					MakeMedicineFeedBack();
 					DestroyObject();
@@ -411,7 +434,7 @@ public class BabyController : MonoBehaviour
 	}
 	private void MakecorrectEmoji()
 	{
-				_uiController.SetEmoji(_lastEmotionState, _currentState);
+		_uiController.SetEmoji(_lastEmotionState, _currentState);
 	}
 }
 public enum BabyState

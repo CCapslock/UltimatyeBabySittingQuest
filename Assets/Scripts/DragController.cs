@@ -53,6 +53,7 @@ public class DragController : MonoBehaviour
 			_itemRigidbody.useGravity = true;
 			_itemTransform.gameObject.layer = 0;
 			_itemRigidbody.AddForce(PlayerTransform.forward * ThrowForce);
+			AudioManger.Current.MakeEffectSound(EffectSound.Throw);
 		}
 	}
 	public bool TryUseOnBaby()

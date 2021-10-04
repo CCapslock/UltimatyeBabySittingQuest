@@ -3,7 +3,7 @@ using UnityEngine;
 public class AudioManger : MonoBehaviour
 {
 	[HideInInspector] public static AudioManger Current;
-	public AudioSource Effects;
+	public AudioSource music;
 	public AudioSource Baby;
 
 	public AudioClip Take;
@@ -21,6 +21,7 @@ public class AudioManger : MonoBehaviour
 			case EffectSound.Take:
 				break;
 			case EffectSound.Throw:
+				music.PlayOneShot(Throw);
 				break;
 			case EffectSound.Use:
 				break;
@@ -37,6 +38,7 @@ public class AudioManger : MonoBehaviour
 			case BabySound.Puke:
 				break;
 		}
+		Baby.Play();
 	}
 }
 
