@@ -28,9 +28,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8748034367472627632}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.263, y: 1.631, z: 0.356}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -115,13 +115,16 @@ MonoBehaviour:
   StinkyCloud: {fileID: 0}
   BasicMaterial: {fileID: 2100000, guid: 049e560d74639f44faebfb8ff1094f02, type: 2}
   OutlinedMaterial: {fileID: 2100000, guid: dde02c7f77223b84c91bf65ca8c620d8, type: 2}
+  DirtyMaterial: {fileID: 0}
+  OutlinedDirtyMaterial: {fileID: 0}
   ItemType: 0
   ItemRenderer: {fileID: 8748034367472627636}
-  PositivePointsIfEat: 20
+  PositivePointsIfEat: 4
   NegativePointsIfEat: 2
-  PositivePointsIfPlay: 0
+  PositivePointsIfPlay: 4
   NegativePointsIfPlay: 0
-  ChanceOfSucces: 80
+  ChanceOfSuccesFood: 70
+  ChanceOfSuccesToy: 25
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0
 --- !u!64 &4323596885393592547

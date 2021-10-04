@@ -135,9 +135,9 @@ MonoBehaviour:
   ItemRenderer: {fileID: 0}
   PositivePointsIfEat: 0
   NegativePointsIfEat: 0
-  PositivePointsIfPlay: 0
-  NegativePointsIfPlay: 0
+  PositivePointsIfPlay: 4
+  NegativePointsIfPlay: 3
   ChanceOfSuccesFood: 0
-  ChanceOfSuccesToy: 0
+  ChanceOfSuccesToy: 80
   ChanceOfRandomAction: 5
   IsDiaperDirty: 0
